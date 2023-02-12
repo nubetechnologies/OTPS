@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.1;
+pragma solidity 0.8.18;
 
 library OTPS {
     function generateCode(bytes32 secret, uint timestamp) public pure returns (uint) {
