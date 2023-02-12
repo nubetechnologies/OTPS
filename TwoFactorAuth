@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.1;
+
+library OTPS {
+    function generateCode(bytes32 secret, uint timestamp) public pure returns (uint) {
+        bytes memory secretBytes = abi.encodePacked(secret);
+        bytes32 hash = sha256(abi.encodePacked(timestamp / 30, secretBytes));
+        uint offset = uint8(hash[31]) & 0x0f;
+        uint truncatedHash = (uint8(hash[offset]) & 0x7f) << 24 | (uint8(hash[offset + 1]) & 0xff) << 16 | (uint8(hash[offset + 2]) & 0xff) << 8 | (uint8(hash[offset + 3]) & 0xff);
+        return truncatedHash % 1000000;
+    }
+
+    function checkCode(bytes32 secret, uint code, uint timestamp) public pure returns (bool) {
+        return generateCode(secret, timestamp) == code;
+    }
+}
